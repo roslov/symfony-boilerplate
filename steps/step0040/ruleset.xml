@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="project-code-styling">
+    <description>Local Project Coding Standard</description>
+    <!-- Excludes vendor and temporary folders -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>var/*</exclude-pattern>
+    <!-- Base rules -->
+    <rule ref="vendor/roslov/psr12ext/PSR12Ext" />
+</ruleset>

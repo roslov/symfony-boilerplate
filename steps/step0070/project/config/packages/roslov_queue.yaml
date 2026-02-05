@@ -1,0 +1,23 @@
+roslov_queue:
+    service_name: '%env(string:SERVICE_NAME)%'
+    ssl_enabled: '%env(bool:RABBITMQ_SSL_ENABLED)%'
+    logger: logger
+    entity_manager: ~
+    payload_mapping:
+        Error: Roslov\QueueBundle\Dto\Error
+        Trigger: Roslov\QueueBundle\Dto\Trigger
+        Event.ExceptionThrown: Roslov\QueueBundle\Dto\ExceptionThrown
+    event_processor:
+        enabled: true
+        instant_delivery: true
+    exception_subscriber:
+        enabled: true
+    exception_sender:
+        exchange_options: { name: 'common', type: topic }
+
+when@test:
+    roslov_queue:
+        event_processor:
+            delayed_delivery_subscriber: false
+        exception_subscriber:
+            enabled: false

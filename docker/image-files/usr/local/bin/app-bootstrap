@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+# Starts the app
+echo "Starting the app..."
+php -v

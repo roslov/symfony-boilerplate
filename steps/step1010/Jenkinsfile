@@ -1,0 +1,37 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+    options {
+        disableConcurrentBuilds()
+    }
+    stages {
+        stage('PR Check') {
+            when {
+                changeRequest()
+            }
+            steps {
+                build job:
+                    'pr-check',
+                    parameters: [
+                        string(name: 'service', value: '${PROJECT_NAME}'),
+                        string(name: 'sourceBranch', value: env.CHANGE_BRANCH),
+                        string(name: 'targetBranch', value: env.CHANGE_TARGET),
+                    ]
+            }
+        }
+        stage('Deployment') {
+            when {
+                expression { env.BRANCH_NAME ==~ /^(main|develop)$/ }
+            }
+            steps {
+                build job:
+                    'deployment',
+                    parameters: [
+                        string(name: 'service', value: '${PROJECT_NAME}'),
+                        string(name: 'branch', value: env.BRANCH_NAME),
+                    ]
+            }
+        }
+    }
+}

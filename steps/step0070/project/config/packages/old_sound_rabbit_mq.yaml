@@ -1,0 +1,27 @@
+old_sound_rabbit_mq:
+    connections:
+        default:
+            url: '%env(RABBITMQ_URL)%'
+            lazy: true
+            connection_timeout: 5
+            read_write_timeout: 65
+            keepalive: false
+            heartbeat: 30
+            connection_parameters_provider: roslov_queue.rabbitmq.simple_ssl_context_provider
+#    producers:
+#        trigger_some_command:
+#            class: App\Producer\SomeCommandProducer
+#            connection: default
+#            exchange_options: { name: 'common', type: topic }
+#            enable_logger: true
+    multiple_consumers:
+        common:
+            connection: default
+            exchange_options: { name: 'common', type: topic }
+            enable_logger: true
+            queues:
+                some-example:
+                    name: ${PROJECT_NAME}-some-example
+                    routing_keys:
+                        - some-example
+                    callback: App\Consumer\ExampleConsumer

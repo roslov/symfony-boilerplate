@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+# Runs `composer install` without scripts — for initial setup
+
+# Add additional arguments to this script to pass them as options to `composer install`.
+# For example, `init-composer --no-scripts`
+
+# Installs Composer dependencies
+echo "Installing Composer dependencies..."
+cd /app
+composer install -n "$@"
+
+echo "Setting vendor directory permissions..."
+chmod 0777 /app/vendor

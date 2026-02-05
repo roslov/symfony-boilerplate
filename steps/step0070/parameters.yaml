@@ -1,0 +1,3 @@
+    # These params are needed to pass them to bundles properly
+    env(SERVICE_NAME): '%env(string:SERVICE_NAME)%'
+    env(RABBITMQ_SSL_ENABLED): '%env(bool:RABBITMQ_SSL_ENABLED)%'

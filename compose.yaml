@@ -1,0 +1,10 @@
+services:
+    boilerplate:
+        build:
+            context: ./docker
+        restart: no
+        volumes:
+            - ./app:/app
+        env_file:
+            - .env.dist
+            - .env

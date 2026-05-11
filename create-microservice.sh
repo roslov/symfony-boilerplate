@@ -130,9 +130,9 @@ docker compose run --rm boilerplate composer config extra.symfony.allow-contrib 
 docker compose run --rm boilerplate composer config --no-plugins \
     allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
 docker compose run --rm boilerplate composer require --dev -W \
-    php-parallel-lint/php-console-highlighter:^1.0 \
-    php-parallel-lint/php-parallel-lint:^1.4 \
-    roslov/psr12ext:^14.0
+    php-parallel-lint/php-console-highlighter \
+    php-parallel-lint/php-parallel-lint \
+    roslov/psr12ext
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib false --json
 docker compose run --rm boilerplate composer update --lock
 docker compose run --rm boilerplate php -r '
@@ -206,9 +206,9 @@ echo -e "${LOG_START}Installing and bootstrapping Codeception with modules...${L
 CODECEPTION_VERSION=5.3
 docker compose run --rm boilerplate composer require --dev -W -n \
     codeception/codeception:^${CODECEPTION_VERSION} \
-    codeception/module-asserts:^3.2 \
-    codeception/module-symfony:^3.7 \
-    codeception/module-phpbrowser:^3.0
+    codeception/module-asserts \
+    codeception/module-symfony \
+    codeception/module-phpbrowser
 docker compose run --rm boilerplate codecept bootstrap
 commit "Tests: Installed and bootstrapped Codeception v${CODECEPTION_VERSION} with modules Asserts, PhpBrowser and Symfony"
 
@@ -265,7 +265,7 @@ $j["scripts"]["test:static"]=array_merge($j["scripts"]["test:static"], ["codecep
 file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES).PHP_EOL);
 '
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib true --json
-docker compose run --rm boilerplate composer require --dev -W phpstan/phpstan-symfony:^2.0
+docker compose run --rm boilerplate composer require --dev -W phpstan/phpstan-symfony
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib false --json
 docker compose run --rm boilerplate composer update --lock
 fixPermissions
@@ -277,7 +277,7 @@ commit 'Added PHPStan'
 ########################################################################################################################
 echo -e "${LOG_START}Setting up Queue bundle...${LOG_END}"
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib true --json
-docker compose run --rm boilerplate composer require -W roslov/queue-bundle:^2.1
+docker compose run --rm boilerplate composer require -W roslov/queue-bundle
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib false --json
 docker compose run --rm boilerplate composer update --lock
 fixPermissions
@@ -330,7 +330,7 @@ $j=json_decode(file_get_contents($f), true, flags: JSON_THROW_ON_ERROR);
 $j["scripts"]["test:static"]=array_merge($j["scripts"]["test:static"], ["rector --dry-run"]);
 file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES).PHP_EOL);
 '
-docker compose run --rm boilerplate composer require --dev -W rector/rector:^2.3
+docker compose run --rm boilerplate composer require --dev -W rector/rector
 # Creates the default Rector config
 yes | docker compose run --rm boilerplate rector
 fixPermissions

@@ -7,7 +7,7 @@ set -e
 fixPermissions()
 {
     echo -e "${COLOR_GRAY}Fixing permissions...${LOG_END}"
-    sudo chown "$(id -un):$(id -gn)" -R .
+    chown "$(id -un $SUDO_USER):$(id -gn $SUDO_USER)" -R .
 }
 
 # Fixes and validates files
@@ -58,7 +58,7 @@ source .env
 
 ########################################################################################################################
 echo -e "${LOG_START}Preparing the \`app\` folder...${LOG_END}"
-sudo rm -rf app
+rm -rf app
 mkdir app
 
 ########################################################################################################################

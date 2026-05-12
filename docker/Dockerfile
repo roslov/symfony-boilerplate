@@ -3,10 +3,10 @@
 ################################
 
 # Build argument: Image tag
-ARG IMAGE_TAG=8.4.17
+ARG IMAGE_TAG=8.5.5
 
 # Build argument: Composer version
-ARG COMPOSER_VERSION=2.9.5
+ARG COMPOSER_VERSION=2.9.7
 
 ###############################
 ### Stage: Composer version ###
@@ -43,7 +43,6 @@ RUN docker-php-ext-configure gd \
     bcmath \
     gd \
     intl \
-    opcache \
     pcntl \
     sockets \
     zip

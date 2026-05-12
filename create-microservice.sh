@@ -30,6 +30,13 @@ fixAndValidateFiles()
     docker compose run --rm boilerplate composer test:unit
 }
 
+# Normalizes composer.json
+normalizeComposer()
+{
+    echo -e "${COLOR_GRAY}Normalizing composer.json....${LOG_END}"
+    docker compose run --rm boilerplate composer normalize
+}
+
 # Commits all files
 commit()
 {
@@ -111,9 +118,13 @@ docker compose run --rm boilerplate \
     && mv composer.tmp.json composer.json
 docker compose run --rm boilerplate composer require -W 'php:>=8.5'
 docker compose run --rm boilerplate \
-    jq --indent 4 '.replace += {"symfony/polyfill-php83":"*","symfony/polyfill-php84":"*"}' composer.json > composer.tmp.json \
+    jq --indent 4 '.replace += {"symfony/polyfill-php83":"*","symfony/polyfill-php84":"*","symfony/polyfill-php85":"*"}' \
+        composer.json > composer.tmp.json \
     && mv composer.tmp.json composer.json
 docker compose run --rm boilerplate composer update
+docker compose run --rm boilerplate composer config allow-plugins.ergebnis/composer-normalize true
+docker compose run --rm boilerplate composer require --dev -W ergebnis/composer-normalize
+normalizeComposer
 commit 'Updated composer.json'
 
 ########################################################################################################################
@@ -143,7 +154,7 @@ $j["scripts"]["phpcs"]="phpcs -d memory_limit=512M --extensions=php --colors --s
 $j["scripts"]["phpcbf"]="phpcbf -d memory_limit=512M --extensions=php --colors --standard=ruleset.xml --runtime-set php_version \"$(php -r '\''echo PHP_VERSION_ID;'\'')\" -p";
 $j["scripts"]["syntax"]="parallel-lint --colors --exclude bin --exclude vendor --exclude var";
 $j["scripts"]["test"]=["@test:static","@test:unit","@test:integration"];
-$j["scripts"]["test:static"]=["@composer validate","@syntax .","bin/console lint:container","bin/console lint:yaml config src","@phpcs ."];
+$j["scripts"]["test:static"]=["@composer validate","@composer normalize --dry-run","@syntax .","bin/console lint:container","bin/console lint:yaml config src","@phpcs ."];
 $j["scripts"]["test:unit"]="echo '\''Notice: Unit tests are not implemented.'\''";
 $j["scripts"]["test:integration"]="echo '\''Notice: Integration tests are not implemented.'\''";
 $j["scripts-descriptions"] ??= [];
@@ -170,6 +181,7 @@ REPLACE="$(cat ../steps/step0040/coding-style.md)" \
 rm README.md && mv README2.md README.md
 echo >> README.md
 cat ../steps/step0040/faq.md >> README.md
+normalizeComposer
 fixAndValidateFiles
 commit 'Added CodeSniffer with PSR-12 Ext rules. Added syntax validation'
 
@@ -179,6 +191,7 @@ docker compose run --rm boilerplate composer require -W \
     symfony/monolog-bundle \
     symfony/serializer
 docker compose run --rm boilerplate composer require --dev -W symfony/debug-bundle
+normalizeComposer
 fixAndValidateFiles
 commit 'Installed base packages'
 
@@ -218,6 +231,7 @@ docker compose run --rm boilerplate composer require --dev -W -n \
     codeception/module-asserts \
     codeception/module-symfony \
     codeception/module-phpbrowser
+normalizeComposer
 docker compose run --rm boilerplate codecept bootstrap
 commit "Tests: Installed and bootstrapped Codeception v${CODECEPTION_VERSION} with modules Asserts, PhpBrowser and Symfony"
 
@@ -251,10 +265,11 @@ cp -rf ../steps/step0050/tests/* tests/
 docker compose run --rm boilerplate php -r '
 $f="composer.json";
 $j=json_decode(file_get_contents($f), true, flags: JSON_THROW_ON_ERROR);
-$j["scripts"]["test:static"]=["@composer validate","@syntax .","bin/console lint:container","bin/console lint:yaml config src tests","@phpcs ."];
+$j["scripts"]["test:static"]=["@composer validate","@composer normalize --dry-run","@syntax .","bin/console lint:container","bin/console lint:yaml config src tests","@phpcs ."];
 $j["scripts"]["test:unit"]="codecept run";
 file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES).PHP_EOL);
 '
+normalizeComposer
 fixAndValidateFiles
 commit 'Tests: Configured Codeception'
 
@@ -278,6 +293,7 @@ docker compose run --rm boilerplate composer config extra.symfony.allow-contrib 
 docker compose run --rm boilerplate composer require --dev -W phpstan/phpstan-symfony
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib false --json
 docker compose run --rm boilerplate composer update --lock
+normalizeComposer
 fixPermissions
 echo '    excludePaths:' >> phpstan.dist.neon
 echo '        - tests/Support/_generated/' >> phpstan.dist.neon
@@ -290,6 +306,7 @@ docker compose run --rm boilerplate composer config extra.symfony.allow-contrib 
 docker compose run --rm boilerplate composer require -W roslov/queue-bundle
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib false --json
 docker compose run --rm boilerplate composer update --lock
+normalizeComposer
 fixPermissions
 sed -i \
     '/^RABBITMQ_URL=amqp:\/\/guest:guest@localhost:5672$/cRABBITMQ_URL=amqp://guest:guest@rabbitmq:5672' \
@@ -341,6 +358,7 @@ $j["scripts"]["test:static"]=array_merge($j["scripts"]["test:static"], ["rector 
 file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES).PHP_EOL);
 '
 docker compose run --rm boilerplate composer require --dev -W rector/rector
+normalizeComposer
 # Creates the default Rector config
 yes | docker compose run --rm boilerplate rector
 fixPermissions

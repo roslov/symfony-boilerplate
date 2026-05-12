@@ -109,7 +109,7 @@ docker compose run --rm boilerplate composer config description "${PROJECT_FULL_
 docker compose run --rm boilerplate \
     jq --indent 4 '{name, description} + del(.name, .description)' composer.json > composer.tmp.json \
     && mv composer.tmp.json composer.json
-docker compose run --rm boilerplate composer require -W 'php:>=8.4'
+docker compose run --rm boilerplate composer require -W 'php:>=8.5'
 docker compose run --rm boilerplate \
     jq --indent 4 '.replace += {"symfony/polyfill-php83":"*","symfony/polyfill-php84":"*"}' composer.json > composer.tmp.json \
     && mv composer.tmp.json composer.json

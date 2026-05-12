@@ -142,9 +142,18 @@ $j["scripts"] ??= [];
 $j["scripts"]["phpcs"]="phpcs -d memory_limit=512M --extensions=php --colors --standard=ruleset.xml --runtime-set php_version \"$(php -r '\''echo PHP_VERSION_ID;'\'')\" -p -s";
 $j["scripts"]["phpcbf"]="phpcbf -d memory_limit=512M --extensions=php --colors --standard=ruleset.xml --runtime-set php_version \"$(php -r '\''echo PHP_VERSION_ID;'\'')\" -p";
 $j["scripts"]["syntax"]="parallel-lint --colors --exclude bin --exclude vendor --exclude var";
+$j["scripts"]["test"]=["@test:static","@test:unit","@test:integration"];
 $j["scripts"]["test:static"]=["@composer validate","@syntax .","bin/console lint:container","bin/console lint:yaml config src","@phpcs ."];
 $j["scripts"]["test:unit"]="echo '\''Notice: Unit tests are not implemented.'\''";
 $j["scripts"]["test:integration"]="echo '\''Notice: Integration tests are not implemented.'\''";
+$j["scripts-descriptions"] ??= [];
+$j["scripts-descriptions"]["phpcs"]="Runs PHP CodeSniffer";
+$j["scripts-descriptions"]["phpcbf"]="Fixes PHP CodeSniffer issues";
+$j["scripts-descriptions"]["syntax"]="Checks PHP syntax";
+$j["scripts-descriptions"]["test"]="Runs static analysis and all tests";
+$j["scripts-descriptions"]["test:static"]="Runs static analysis";
+$j["scripts-descriptions"]["test:unit"]="Runs unit tests";
+$j["scripts-descriptions"]["test:integration"]="Runs integration tests";
 file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES).PHP_EOL);
 '
 cp ../steps/step0040/ruleset.xml ./
@@ -262,6 +271,7 @@ $f="composer.json";
 $j=json_decode(file_get_contents($f), true, flags: JSON_THROW_ON_ERROR);
 $j["scripts"]["phpstan"]="phpstan analyse --memory-limit=512M";
 $j["scripts"]["test:static"]=array_merge($j["scripts"]["test:static"], ["codecept build","@phpstan"]);
+$j["scripts-descriptions"]["phpstan"]="Runs PHPStan static analysis";
 file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES).PHP_EOL);
 '
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib true --json

@@ -11,7 +11,7 @@ How to create a new microservice
 
 1. Copy `.env.dist` to `.env`.
 2. Change `.env` with proper values.
-3. Run `sudo ./create-microservice.sh`
+3. Run `./create-microservice.sh`
 4. A new folder named `app` will contain the files and folders of the new microservice along with its Git commit
     messages.
 5. Push the content of the `app` folder to a new microservice repository.

@@ -2,6 +2,11 @@ services:
     boilerplate:
         build:
             context: ./docker
+            args:
+                HOST_USER: "${HOST_USER:?Set HOST_USER}"
+                HOST_GROUP: "${HOST_GROUP:?Set HOST_GROUP}"
+                HOST_UID: "${HOST_UID:?Set HOST_UID}"
+                HOST_GID: "${HOST_GID:?Set HOST_GID}"
         restart: no
         volumes:
             - ./app:/app

@@ -3,13 +3,6 @@ set -e
 
 ### Bootstraps a new microservice
 
-# Fixes file permissions
-fixPermissions()
-{
-    echo -e "${COLOR_GRAY}Fixing permissions...${LOG_END}"
-    chown "$(id -un $SUDO_USER):$(id -gn $SUDO_USER)" -R .
-}
-
 # Fixes and validates files
 #
 # `rector` should be run twice to guarantee all changes are made.
@@ -71,6 +64,10 @@ mkdir app
 
 ########################################################################################################################
 echo -e "${LOG_START}Building images...${LOG_END}"
+export HOST_USER="$(id -un)"
+export HOST_GROUP="$(id -gn)"
+export HOST_UID="$(id -u)"
+export HOST_GID="$(id -g)"
 docker compose build
 
 ########################################################################################################################
@@ -88,7 +85,6 @@ commit "Installed Symfony skeleton v${SYMFONY_VERSION}"
 echo -e "${LOG_START}Updating .gitignore...${LOG_END}"
 newContent=$(cat ../steps/step0010/.gitignore)
 oldContent=$(cat .gitignore)
-fixPermissions
 printf "%s\n%s\n" "$newContent" "$oldContent" > .gitignore
 commit 'Updated .gitignore'
 
@@ -246,7 +242,6 @@ REPLACE="$(cat ../steps/step0050/tests.md)" \
     < README.md \
     > README2.md
 rm README.md && mv README2.md README.md
-fixPermissions
 cat ../steps/step0050/codeception.yml >> codeception.yml
 sed -i 's/"App\\\\Tests\\\\": "tests\/"/"Tests\\\\": "tests\/"/' composer.json
 docker compose run --rm boilerplate composer dump-autoload
@@ -298,7 +293,6 @@ docker compose run --rm boilerplate composer update --lock
 #docker compose run --rm boilerplate composer require --dev -W phpstan/phpstan-doctrine
 cp -rf ../steps/step0060/stubs stubs
 normalizeComposer
-fixPermissions
 sed -i 's/level: 6/level: max/' phpstan.dist.neon
 echo '    excludePaths:' >> phpstan.dist.neon
 echo '        - tests/Support/_generated/' >> phpstan.dist.neon
@@ -321,7 +315,6 @@ docker compose run --rm boilerplate composer require -W roslov/queue-bundle
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib false --json
 docker compose run --rm boilerplate composer update --lock
 normalizeComposer
-fixPermissions
 sed -i \
     '/^RABBITMQ_URL=amqp:\/\/guest:guest@localhost:5672$/cRABBITMQ_URL=amqp://guest:guest@rabbitmq:5672' \
     .env
@@ -375,14 +368,12 @@ docker compose run --rm boilerplate composer require --dev -W rector/rector
 normalizeComposer
 # Creates the default Rector config
 docker compose run --rm boilerplate rector -n
-fixPermissions
 fixAndValidateFiles
 commit 'Added Rector'
 
 ########################################################################################################################
 echo -e "${LOG_START}Configuring Rector...${LOG_END}"
 cp ../steps/step0080/rector.php rector.php
-fixPermissions
 fixAndValidateFiles
 commit 'Configured Rector'
 
@@ -393,10 +384,6 @@ PROJECT_NAME="${PROJECT_NAME}" \
     < ../steps/step1010/Jenkinsfile \
     > Jenkinsfile
 commit 'CI: Added Jenkinsfile'
-
-########################################################################################################################
-echo -e "${LOG_START}Fixing permissions...${LOG_END}"
-fixPermissions
 
 ########################################################################################################################
 echo -e "${LOG_START}Displaying the current git log...${LOG_END}"

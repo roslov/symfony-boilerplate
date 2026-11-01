@@ -34,6 +34,7 @@ fixAndValidateFiles()
 normalizeComposer()
 {
     echo -e "${COLOR_GRAY}Normalizing composer.json....${LOG_END}"
+    docker compose run --rm boilerplate composer bump
     docker compose run --rm boilerplate composer normalize
 }
 

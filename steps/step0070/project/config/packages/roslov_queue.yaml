@@ -3,10 +3,6 @@ roslov_queue:
     ssl_enabled: '%env(bool:RABBITMQ_SSL_ENABLED)%'
     logger: logger
     entity_manager: ~
-    payload_mapping:
-        Error: Roslov\QueueBundle\Dto\Error
-        Trigger: Roslov\QueueBundle\Dto\Trigger
-        Event.ExceptionThrown: Roslov\QueueBundle\Dto\ExceptionThrown
     event_processor:
         enabled: true
         instant_delivery: true

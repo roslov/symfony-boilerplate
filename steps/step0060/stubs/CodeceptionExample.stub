@@ -1,0 +1,49 @@
+<?php
+
+namespace Codeception;
+
+/**
+ * @template T of array
+ * @extends \ArrayObject<key-of<T>, T[key-of<T>]>
+ */
+class Example extends \ArrayObject
+{
+    /**
+     * @template K of key-of<T>
+     *
+     * @param K $key
+     *
+     * @return T[K]
+     */
+    public function offsetGet(mixed $key): mixed
+    {
+    }
+
+    /**
+     * @template K of key-of<T>
+     *
+     * @param K $key
+     */
+    public function offsetExists(mixed $key): bool
+    {
+    }
+
+    /**
+     * @template K of key-of<T>
+     *
+     * @param K|null $key
+     * @param ($key is null ? T[key-of<T>] : T[K]) $value
+     */
+    public function offsetSet(mixed $key, mixed $value): void
+    {
+    }
+
+    /**
+     * @template K of key-of<T>
+     *
+     * @param K $key
+     */
+    public function offsetUnset(mixed $key): void
+    {
+    }
+}

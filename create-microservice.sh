@@ -294,10 +294,23 @@ docker compose run --rm boilerplate composer config extra.symfony.allow-contrib 
 docker compose run --rm boilerplate composer require --dev -W phpstan/phpstan-symfony
 docker compose run --rm boilerplate composer config extra.symfony.allow-contrib false --json
 docker compose run --rm boilerplate composer update --lock
+# TODO: Uncomment for Doctrine support
+#docker compose run --rm boilerplate composer require --dev -W phpstan/phpstan-doctrine
+cp -rf ../steps/step0060/stubs stubs
 normalizeComposer
 fixPermissions
+sed -i 's/level: 6/level: max/' phpstan.dist.neon
 echo '    excludePaths:' >> phpstan.dist.neon
 echo '        - tests/Support/_generated/' >> phpstan.dist.neon
+echo '    stubFiles:' >> phpstan.dist.neon
+echo '        - stubs/CodeceptionExample.stub' >> phpstan.dist.neon
+# TODO: Uncomment for Doctrine support
+#echo 'includes:' >> phpstan.dist.neon
+#echo '    - vendor/phpstan/phpstan-doctrine/extension.neon' >> phpstan.dist.neon
+sed -i '/return static function (array \$context) {/,/};/c\
+/** @phpstan-ignore argument.type */\
+return static fn (array $context): Kernel => new Kernel($context['\''APP_ENV'\''], (bool) $context['\''APP_DEBUG'\'']);' \
+    public/index.php
 fixAndValidateFiles
 commit 'Added PHPStan'
 

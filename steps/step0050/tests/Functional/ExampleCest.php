@@ -18,7 +18,7 @@ final class ExampleCest
      */
     public function _before(FunctionalTester $I): void
     {
-        // Your code that will run before a test
+        $I->wantTo('do something');
     }
 
     /**

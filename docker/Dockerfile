@@ -78,3 +78,18 @@ RUN mkdir -p ~/.ssh \
 # Installs Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 COPY --from=versioned-composer /usr/bin/composer /usr/bin/composer
+
+# Sets the same user and group as the host machine has
+ARG HOST_USER
+ARG HOST_GROUP
+ARG HOST_UID
+ARG HOST_GID
+RUN groupadd --gid "${HOST_GID}" "${HOST_GROUP}" \
+    && useradd \
+        --uid "${HOST_UID}" \
+        --gid "${HOST_GID}" \
+        --create-home \
+        --shell /bin/bash \
+        "${HOST_USER}"
+RUN chown "${HOST_UID}:${HOST_GID}" /app
+USER ${HOST_UID}:${HOST_GID}

@@ -361,7 +361,7 @@ file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES).
 docker compose run --rm boilerplate composer require --dev -W rector/rector
 normalizeComposer
 # Creates the default Rector config
-yes | docker compose run --rm boilerplate rector
+docker compose run --rm boilerplate rector -n
 fixPermissions
 fixAndValidateFiles
 commit 'Added Rector'

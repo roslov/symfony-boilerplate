@@ -52,12 +52,25 @@ symfony-boilerplate/
 
 ## Core orchestration helpers (`create-microservice.sh`)
 
-`create-microservice.sh` defines three core helper functions used across provisioning stages:
+`create-microservice.sh` defines reusable helper functions used across provisioning stages:
 
-1. **`normalizeComposer()`**:
-   - Runs `docker compose run --rm boilerplate composer bump` to pin minimum dependency versions in `composer.json`.
-   - Runs `docker compose run --rm boilerplate composer normalize` to canonicalize `composer.json` structure.
-2. **`fixAndValidateFiles()`**:
+1. **`logStep "<message>"` & `logSubStep "<message>"`**:
+   - Format primary stage headers and secondary action logs with consistent ANSI color codes.
+2. **`runInContainer <cmd> [args...]`**:
+   - Executes commands inside the `boilerplate` Docker container (`docker compose run --rm boilerplate "$@"`).
+3. **`requireWithContrib <args...>`**:
+   - Temporarily enables `extra.symfony.allow-contrib`, runs `composer require "$@"`, disables `allow-contrib`, and
+     runs `composer update --lock`.
+4. **`updateComposerJsonWithJq "<filter>"` & `updateComposerJsonWithPhp`**:
+   - Modify `composer.json` in place using `jq --indent 4` or a PHP snippet read from standard input operating on
+     `$composer`.
+5. **`prependToFile`, `renderTemplate`, & `replacePlaceholder`**:
+   - Prepend template files, render templates via `envsubst` with an explicit variable whitelist, or inject snippet
+     files into `${REPLACE}` placeholders.
+6. **`normalizeComposer()`**:
+   - Runs `runInContainer composer bump` to pin minimum dependency versions in `composer.json`.
+   - Runs `runInContainer composer normalize` to canonicalize `composer.json` structure.
+7. **`fixAndValidateFiles()`**:
    - If `vendor/bin/rector` is installed, runs `rector` **twice** inside the container so cascading AST transformations
      settle completely.
    - Runs `composer phpcbf . || true` to auto-format code according to `ruleset.xml`.
@@ -65,7 +78,7 @@ symfony-boilerplate/
      `bin/console lint:container`, `bin/console lint:yaml`, `phpcs`, `codecept build`, `phpstan`, and
      `rector --dry-run`.
    - Runs `composer test:unit` to execute the Codeception test suites.
-3. **`commit "<message>"`**:
+8. **`commit "<message>"`**:
    - Stages all files (`git add .`) and creates a commit prefixed with `[init] <message>`.
 
 ## Provisioning pipeline flow

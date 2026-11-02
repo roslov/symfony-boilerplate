@@ -11,7 +11,7 @@
 
 ## Docker Image and Permission Model
 
-- [x] `docker/Dockerfile` builds a PHP 8.5 (`IMAGE_TAG=8.5.5`) and Composer 2.9 (`COMPOSER_VERSION=2.9.7`) container
+- [x] `docker/Dockerfile` builds a PHP 8.5 (`IMAGE_TAG=8.5.12`) and Composer 2.11 (`COMPOSER_VERSION=2.11.1`) container
   with `bcmath`, `gd`, `intl`, `pcntl`, `sockets`, and `zip` extensions.
 - [x] `compose.yaml` passes `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID` build arguments so container processes
   run under the host user's UID/GID without requiring `sudo`.

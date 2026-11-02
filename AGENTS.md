@@ -81,7 +81,7 @@ Repository files are organized into distinct layers:
   - `steps/step0090/`: AI agent support templates (`AGENTS.md`, `documentation.md`, `docs/*.md`, and
     `.agents/skills/*/SKILL.md`) rendered with `envsubst`.
   - `steps/step1010/`: `Jenkinsfile` declarative CI/CD pipeline template.
-- `docker/`: Container image definition (`Dockerfile` with PHP 8.5 and Composer 2.9) and container filesystem overlay
+- `docker/`: Container image definition (`Dockerfile` with PHP 8.5 and Composer 2.11) and container filesystem overlay
   (`docker/image-files/`).
 - `compose.yaml`: Defines the `boilerplate` service mounting `./app:/app` and loading `.env.dist` and `.env`.
 - `.env.dist`: Default configuration template for microservice generation variables.

@@ -31,8 +31,8 @@ Roslov Queue Bundle (`roslov/queue-bundle`), RabbitMQ (`php-amqplib/rabbitmq-bun
 
 | Argument / Variable | Default Value | Purpose                                                                  |
 |---------------------|---------------|--------------------------------------------------------------------------|
-| `IMAGE_TAG`         | `8.5.5`       | Base `php:$IMAGE_TAG` CLI image tag                                      |
-| `COMPOSER_VERSION`  | `2.9.7`       | Base `composer:$COMPOSER_VERSION` image used to copy `/usr/bin/composer` |
+| `IMAGE_TAG`         | `8.5.12`      | Base `php:$IMAGE_TAG` CLI image tag                                      |
+| `COMPOSER_VERSION`  | `2.11.1`      | Base `composer:$COMPOSER_VERSION` image used to copy `/usr/bin/composer` |
 | `HOST_USER`         | `$(id -un)`   | Host username created inside the container                               |
 | `HOST_GROUP`        | `$(id -gn)`   | Host group name created inside the container                             |
 | `HOST_UID`          | `$(id -u)`    | Host user UID assigned to container user and `/app` directory            |

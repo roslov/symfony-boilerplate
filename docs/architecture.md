@@ -25,7 +25,7 @@ symfony-boilerplate/
 ├── compose.yaml             # Defines the `boilerplate` Docker Compose service
 ├── create-microservice.sh   # Main Bash pipeline script
 ├── docker/
-│   ├── Dockerfile           # PHP 8.5 + Composer 2.9 image with UID/GID mapping
+│   ├── Dockerfile           # PHP 8.5 + Composer 2.11 image with UID/GID mapping
 │   └── image-files/         # Container filesystem overlay
 │       ├── root/.bashrc     # Shell aliases and prompt settings
 │       └── usr/local/

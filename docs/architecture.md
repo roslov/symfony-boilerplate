@@ -47,6 +47,7 @@ symfony-boilerplate/
     ├── step0060/            # PHPStan stub (CodeceptionExample.stub)
     ├── step0070/            # Queue bundle configs, parameters.yaml, consumers.md, ExampleConsumer.php
     ├── step0080/            # Rector configuration (rector.php)
+    ├── step0090/            # AI agent support (AGENTS.md, documentation.md, docs/, .agents/skills/)
     └── step1010/            # Declarative Jenkinsfile CI template
 ```
 
@@ -104,6 +105,7 @@ Host: ./create-microservice.sh
   ├── Step 0060: Install phpstan/phpstan-symfony, set level: max, add stubs/CodeceptionExample.stub
   ├── Step 0070: Install roslov/queue-bundle, configure RabbitMQ & ExampleConsumer
   ├── Step 0080: Install rector/rector and apply steps/step0080/rector.php
+  ├── Step 0090: Render AGENTS.md, docs/*.md, .agents/skills/*/SKILL.md, and update README.md
   └── Step 1010: Render Jenkinsfile via envsubst
 ```
 
@@ -113,11 +115,17 @@ Once `./create-microservice.sh` finishes, `./app` contains a self-contained Symf
 
 ```text
 app/
+├── .agents/
+│   └── skills/
+│       ├── docker-verification/
+│       ├── queue-and-messaging/
+│       └── testing/
 ├── .editorconfig
 ├── .env                     # Default environment variables (APP_ENV, RABBITMQ_URL, SERVICE_NAME)
 ├── .env.test                # Test environment overrides (test-rabbitmq)
 ├── .gitattributes
 ├── .gitignore
+├── AGENTS.md                # AI agent and contributor guidance
 ├── Jenkinsfile              # CI pipeline triggering `pr-check` and `deployment` jobs
 ├── Makefile                 # Host helper targets delegating to `$(MAKE) -C ../..`
 ├── README.md                # Generated service documentation
@@ -132,6 +140,12 @@ app/
 │   │   ├── old_sound_rabbit_mq.yaml
 │   │   └── roslov_queue.yaml
 │   └── services.yaml
+├── docs/
+│   ├── acceptance-criteria.md
+│   ├── architecture.md
+│   ├── requirements.md
+│   ├── security.md
+│   └── testing.md
 ├── phpstan.dist.neon        # PHPStan level: max configuration
 ├── public/index.php         # HTTP front controller
 ├── rector.php               # Rector configuration

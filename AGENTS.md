@@ -78,6 +78,8 @@ Repository files are organized into distinct layers:
   - `steps/step0070/`: `roslov/queue-bundle` and `old_sound_rabbit_mq` configuration templates, `parameters.yaml`,
     `consumers.md`, and `src/Consumer/ExampleConsumer.php`.
   - `steps/step0080/`: `rector.php` configuration with strict PHP, Symfony, Doctrine, and PHPUnit prepared sets.
+  - `steps/step0090/`: AI agent support templates (`AGENTS.md`, `documentation.md`, `docs/*.md`, and
+    `.agents/skills/*/SKILL.md`) rendered with `envsubst`.
   - `steps/step1010/`: `Jenkinsfile` declarative CI/CD pipeline template.
 - `docker/`: Container image definition (`Dockerfile` with PHP 8.5 and Composer 2.9) and container filesystem overlay
   (`docker/image-files/`).

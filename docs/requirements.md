@@ -10,7 +10,8 @@ of `[init]` Git commits.
 Each generated microservice comes preconfigured with PHP 8.5, Symfony (`symfony/skeleton`), Monolog, Symfony Serializer,
 Roslov Queue Bundle (`roslov/queue-bundle`), RabbitMQ (`php-amqplib/rabbitmq-bundle`), Codeception (`Unit` and
 `Functional` suites), PHP_CodeSniffer (`roslov/psr12ext`), PHPStan (`level: max`), Rector,
-`ergebnis/composer-normalize`, a host development `Makefile`, and a declarative `Jenkinsfile`.
+`ergebnis/composer-normalize`, AI agent guidance (`AGENTS.md`, `docs/`, and `.agents/skills/`), a host development
+`Makefile`, and a declarative `Jenkinsfile`.
 
 ## Configuration placeholders
 
@@ -49,7 +50,7 @@ Roslov Queue Bundle (`roslov/queue-bundle`), RabbitMQ (`php-amqplib/rabbitmq-bun
 
 ## Bootstrapping pipeline specification
 
-Executing `./create-microservice.sh` must perform the following 18 sequential stages and commit each stage to the `main`
+Executing `./create-microservice.sh` must perform the following 19 sequential stages and commit each stage to the `main`
 branch in `app/`:
 
 1. **Symfony Skeleton (`[init] Installed Symfony skeleton v${SYMFONY_VERSION}`)**:
@@ -102,5 +103,9 @@ branch in `app/`:
     - Installs `rector/rector`, initializes default Rector config, and adds `rector --dry-run` to `test:static`.
 17. **Rector Configuration (`[init] Configured Rector`)**:
     - Copies `steps/step0080/rector.php` and runs `fixAndValidateFiles`.
-18. **CI Configuration (`[init] CI: Added Jenkinsfile`)**:
+18. **AI Agent Support (`[init] Added AI agent support`)**:
+    - Updates `README.md` with `steps/step0090/documentation.md`, copies `AGENTS.md`, `docs/*.md`, and
+      `.agents/skills/*/SKILL.md` from `steps/step0090/project/`, renders project variables via `envsubst`, and runs
+      `fixAndValidateFiles`.
+19. **CI Configuration (`[init] CI: Added Jenkinsfile`)**:
     - Renders `steps/step1010/Jenkinsfile` with `${PROJECT_NAME}`.

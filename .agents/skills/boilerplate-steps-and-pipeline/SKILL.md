@@ -28,6 +28,7 @@ Provisioning templates live in numbered directories under `steps/` corresponding
 | `steps/step0060` | PHPStan stub (`stubs/CodeceptionExample.stub`)                                           |
 | `steps/step0070` | `roslov_queue.yaml`, `old_sound_rabbit_mq.yaml`, `parameters.yaml`, `ExampleConsumer`    |
 | `steps/step0080` | `rector.php` configuration                                                               |
+| `steps/step0090` | AI agent support (`AGENTS.md`, `documentation.md`, `docs/*.md`, `.agents/skills/*`)      |
 | `steps/step1010` | Declarative `Jenkinsfile` rendered with `${PROJECT_NAME}`                                |
 
 When inserting a new step between existing steps, choose an intermediate number (for example, `step0065` between

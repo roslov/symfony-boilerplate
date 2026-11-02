@@ -65,6 +65,8 @@ Repository files are organized into distinct layers:
   `normalizeComposer`, `commit`), Composer package installations, and step commits.
 - `Makefile`: Host development `Makefile` providing `build`, `shell`, `test`, `static`, `unit`, `integration`, and
   `help` targets that automatically pass `HOST_*` user/group variables to `docker compose run --rm boilerplate`.
+- `.github/workflows/tests.yml`: GitHub Actions CI workflow that validates `create-microservice.sh` syntax, builds a
+  microservice via `make build`, and runs `make test` on pushes and pull requests.
 - `steps/`: Modular provisioning steps applied in numerical order:
   - `steps/step0010/`: `.gitignore` IDE exclusions prepended to Symfony's default `.gitignore`.
   - `steps/step0020/`: `.editorconfig` and `.gitattributes` templates.

@@ -115,3 +115,16 @@ app/tests/
 
 Note that `Acceptance.suite.yml`, `AcceptanceTester.php`, and `codeception/module-phpbrowser` are intentionally removed
 during `step0050` configuration because backend microservices use `Unit` and `Functional` (or `Api`) suites.
+
+---
+
+## 4. Continuous integration (`.github/workflows/tests.yml`)
+
+On every push and pull request (ignoring documentation-only changes), the GitHub Actions `Tests` workflow runs on
+`ubuntu-latest` and executes:
+
+1. `actions/checkout@v7` to check out the repository.
+2. `bash -n create-microservice.sh` to validate generator script syntax.
+3. Git author configuration (`user.name` and `user.email`) required for `[init]` commits during generation.
+4. `make build` to build the `boilerplate` Docker image and execute all provisioning and validation steps into `./app`.
+5. `make test` to run static analysis, unit, and integration test targets against the generated microservice.

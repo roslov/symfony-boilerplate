@@ -11,7 +11,7 @@ to Git on the host.
 
 | Context                | Execution Location                | Primary Responsibility                                 |
 |------------------------|-----------------------------------|--------------------------------------------------------|
-| Orchestrator Script    | Host (`./create-microservice.sh`) | Cleans `app/`, builds image, applies `steps/`, commits |
+| Orchestrator & Make    | Host (`./create-microservice.sh`) | Cleans `app/`, builds image, applies `steps/`, commits |
 | Boilerplate Container  | Docker (`boilerplate`)            | Runs `composer`, `php`, `rector`, `phpcs`, `phpstan`   |
 | Generated Microservice | `./app` (`/app` in Docker)        | Output Symfony repo with `main` and `[init]` commits   |
 
@@ -21,6 +21,7 @@ to Git on the host.
 symfony-boilerplate/
 ├── .env.dist                # Default template variables for microservice generation
 ├── .gitignore               # Ignores /.idea/, /app/, and .env
+├── Makefile                 # Host helper targets (build, shell, test, static, unit, integration, help)
 ├── compose.yaml             # Defines the `boilerplate` Docker Compose service
 ├── create-microservice.sh   # Main Bash pipeline script
 ├── docker/

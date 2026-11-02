@@ -15,6 +15,8 @@
   with `bcmath`, `gd`, `intl`, `pcntl`, `sockets`, and `zip` extensions.
 - [x] `compose.yaml` passes `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID` build arguments so container processes
   run under the host user's UID/GID without requiring `sudo`.
+- [x] Root `Makefile` provides `build`, `shell`, `test`, `static`, `unit`, `integration`, and `help` targets that
+  automatically pass `HOST_*` variables to `docker compose run --rm boilerplate`.
 - [x] PHP INI configurations (`base-custom.ini` and `custom.ini`) set `date.timezone = UTC` and `memory_limit = 512M`.
 
 ## Bootstrapping Pipeline and Step Templates

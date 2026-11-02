@@ -36,9 +36,9 @@ The boilerplate operates across three primary boundaries:
 
 ## Container security and permission model
 
-- **No `sudo` Requirement**: `create-microservice.sh` exports `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID`
-  before running `docker compose build`. `docker/Dockerfile` creates the matching group and user and sets
-  `USER ${HOST_UID}:${HOST_GID}`, ensuring every file created in `./app` is owned by the host user.
+- **No `sudo` Requirement**: `create-microservice.sh` and the root `Makefile` export `HOST_USER`, `HOST_GROUP`,
+  `HOST_UID`, and `HOST_GID` before running `docker compose`. `docker/Dockerfile` creates the matching group and user
+  and sets `USER ${HOST_UID}:${HOST_GID}`, ensuring every file created in `./app` is owned by the host user.
 - **PHP Runtime Hardening (`docker/image-files/usr/local/etc/php/conf.d/base-custom.ini`)**:
   - `expose_php=off` prevents leaking PHP version headers.
   - `cgi.fix_pathinfo=0` prevents path resolution vulnerabilities.

@@ -18,7 +18,7 @@ Roslov Queue Bundle (`roslov/queue-bundle`), RabbitMQ (`php-amqplib/rabbitmq-bun
 
 | Variable                   | Default / Example Value      | Purpose                                                  |
 |----------------------------|------------------------------|----------------------------------------------------------|
-| `SYMFONY_VERSION`          | `7.3` (or `7.4`)             | Target Symfony major.minor skeleton branch (`7.3.x`)     |
+| `SYMFONY_VERSION`          | `8.1`                        | Target Symfony major.minor skeleton branch (`8.1.x`)     |
 | `REPO_SITE`                | `github.com`                 | Git hosting domain interpolated into `README.md` links   |
 | `VENDOR`                   | `yourvendor`                 | Composer vendor namespace (`<vendor>/<project_name>`)    |
 | `PROJECT_NAME`             | `example`                    | Short service identifier (`composer.json`, queues, CI)   |

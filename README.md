@@ -27,11 +27,11 @@ The boilerplate generator provides:
 
 ## Technology
 
-- Bash bootstrapping pipeline (`create-microservice.sh`)
+- Bash bootstrapping pipeline (`create-microservice.sh`) and host `Makefile`
 - Docker and Docker Compose (`docker/Dockerfile`, `compose.yaml`)
 - PHP 8.5 (`IMAGE_TAG=8.5.5`) with strict types (`declare(strict_types=1);`)
 - Composer 2.9 (`COMPOSER_VERSION=2.9.7`) with `ergebnis/composer-normalize`
-- Symfony skeleton (`SYMFONY_VERSION` configured in `.env`, e.g., `7.3` or `7.4`)
+- Symfony skeleton (`SYMFONY_VERSION` configured in `.env`, e.g., `8.1`)
 - Roslov Queue Bundle (`roslov/queue-bundle`) and RabbitMQ (`php-amqplib/rabbitmq-bundle`)
 - Codeception 5.3 (`codeception/codeception`, `codeception/module-asserts`, `codeception/module-symfony`)
 - PHPStan (`level: max`) with `phpstan/phpstan-symfony`
@@ -45,6 +45,8 @@ The repository is organized as follows:
 
 - `create-microservice.sh`: Main Bash orchestration script that builds the Docker image, initializes `./app`, and
   applies every step in sequence while validating and committing the result;
+- `Makefile`: Host development `Makefile` providing helper targets (`build`, `shell`, `test`, `static`, `unit`,
+  `integration`, `help`) that automatically pass `HOST_*` user/group variables to `docker compose`;
 - `compose.yaml`: Docker Compose definition for the `boilerplate` service mounting `./app` to `/app`;
 - `docker/`: Container build context (`Dockerfile` and `image-files/` with PHP INI configurations and helper scripts);
 - `steps/`: Ordered step directories (`step0010` to `step1010`) containing templates, configurations, and stubs copied
@@ -64,7 +66,7 @@ See:
 ## Prerequisites
 
 - Docker and Docker Compose
-- Bash, `git`, and `envsubst` (from `gettext-base`) on the host machine
+- Bash, `git`, `make`, and `envsubst` (from `gettext-base`) on the host machine
 
 All PHP, Composer, static analysis, and test executions run strictly inside the `boilerplate` Docker container. Agents
 and contributors must not install PHP or Composer packages on the host machine or WSL.
@@ -75,7 +77,7 @@ Copy `.env.dist` to `.env` and customize the variables for the target microservi
 
 | Variable                   | Example Value              | Description                                               |
 |----------------------------|----------------------------|-----------------------------------------------------------|
-| `SYMFONY_VERSION`          | `7.3`                      | Major.minor Symfony skeleton version (`symfony/skeleton`) |
+| `SYMFONY_VERSION`          | `8.1`                      | Major.minor Symfony skeleton version (`symfony/skeleton`) |
 | `REPO_SITE`                | `github.com`               | Git hosting domain used in generated documentation links  |
 | `VENDOR`                   | `yourvendor`               | Composer vendor prefix and repository organization        |
 | `PROJECT_NAME`             | `example`                  | Short microservice slug (`composer.json`, queues)         |
@@ -90,9 +92,9 @@ Copy `.env.dist` to `.env` and customize the variables for the target microservi
    cp .env.dist .env
    ```
 2. Edit `.env` with the target microservice settings (`SYMFONY_VERSION`, `VENDOR`, `PROJECT_NAME`, etc.).
-3. Run the generator script from the repository root:
+3. Run the generator from the repository root using `make` (or `./create-microservice.sh` directly):
    ```sh
-   ./create-microservice.sh
+   make build
    ```
 4. Inspect the generated microservice and its Git commit log inside the `app/` directory:
    ```sh
@@ -110,10 +112,18 @@ the repository root:
 # 1. Check Bash script syntax
 bash -n create-microservice.sh
 
-# 2. Run the full microservice generation pipeline (runs Rector, PHPCBF, test:static, and test:unit at each step)
-./create-microservice.sh
+# 2. Run the full microservice generation pipeline (creates .env if missing and runs ./create-microservice.sh)
+make build
 
-# 3. Run static analysis and tests against an already generated ./app directory
+# 3. Run all static analysis, unit, and integration tests against an already generated ./app directory
+make test
+
+# Or run individual test suites via make:
+make static
+make unit
+make integration
+
+# Equivalent direct Docker Compose commands:
 HOST_USER="$(id -un)" HOST_GROUP="$(id -gn)" HOST_UID="$(id -u)" HOST_GID="$(id -g)" \
     docker compose run --rm boilerplate composer test:static
 

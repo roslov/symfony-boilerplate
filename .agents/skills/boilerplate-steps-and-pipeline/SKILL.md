@@ -45,37 +45,41 @@ When inserting a new step between existing steps, choose an intermediate number 
 - Ensure all PHP files include `declare(strict_types=1);` and complete PHPDoc doc blocks so they pass PHPCS, PHPStan
   (`level: max`), and Rector.
 
-### Step 2: Render Templates Safely with `envsubst`
+### Step 2: Render Templates Safely with `renderTemplate` and `replacePlaceholder`
 
-Because `create-microservice.sh` `cd`s into `app/` at line 75, reference step files via `../steps/stepXXXX/...`.
+Because `create-microservice.sh` `cd`s into `app/` before running provisioning steps, reference step files via
+`../steps/stepXXXX/...`.
 
-Always pass an explicit single-quoted variable whitelist to `envsubst` so shell variables or PHP `$variables` in the
-template are not wiped out:
+Always pass an explicit single-quoted variable whitelist to `renderTemplate` (which wraps `envsubst`) so shell
+variables or PHP `$variables` in the template are not wiped out:
 
 ```bash
-PROJECT_NAME="${PROJECT_NAME}" \
-    envsubst '${PROJECT_NAME}' \
-    < ../steps/step0038/Makefile \
-    > Makefile
+renderTemplate ../steps/step0038/Makefile Makefile '${PROJECT_NAME}'
 ```
 
 When replacing a placeholder section inside `README.md` or `config/services.yaml`:
 
 1. Use `sed -i` to replace the target lines with literal `\${REPLACE}`.
-2. Run `REPLACE="$(cat ../steps/stepXXXX/snippet.md)" envsubst '${REPLACE}' < file > file2 && rm file && mv file2 file`.
-
-### Step 3: Installing Symfony Flex Contrib Recipes
-
-By default, `extra.symfony.allow-contrib` is set to `false`. When requiring a package that needs a contrib recipe or
-when Composer prompts should be avoided during installation, temporarily enable `allow-contrib` and disable it
-afterward:
+2. Call `replacePlaceholder <target_file> <snippet_file>` to substitute `${REPLACE}` with the snippet contents:
 
 ```bash
-docker compose run --rm boilerplate composer config extra.symfony.allow-contrib true --json
-docker compose run --rm boilerplate composer require -W vendor/package
-docker compose run --rm boilerplate composer config extra.symfony.allow-contrib false --json
-docker compose run --rm boilerplate composer update --lock
+sed -i '/^Testing$/,/^\*\*TBD\*\*$/c\${REPLACE}' README.md
+replacePlaceholder README.md ../steps/step0050/tests.md
 ```
+
+### Step 3: Installing Packages and Updating `composer.json`
+
+Use the container and Composer helper functions defined in `create-microservice.sh`:
+
+- **`runInContainer <cmd> [args...]`**: Runs any command inside the `boilerplate` Docker container.
+- **`requireWithContrib <args...>`**: Temporarily sets `extra.symfony.allow-contrib` to `true`, runs
+  `composer require "$@"`, resets `allow-contrib` to `false`, and runs `composer update --lock`:
+  ```bash
+  requireWithContrib -W roslov/queue-bundle
+  ```
+- **`updateComposerJsonWithJq '<filter>'`**: Applies a `jq --indent 4` transformation to `composer.json`.
+- **`updateComposerJsonWithPhp <<'PHP' ... PHP`**: Modifies `$composer` in `composer.json` via a clean heredoc PHP
+  snippet.
 
 ### Step 4: Normalize, Fix, Validate, and Commit
 

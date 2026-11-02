@@ -60,8 +60,9 @@ See `.agents/skills/docker-verification/SKILL.md` for detailed command patterns.
 Repository files are organized into distinct layers:
 
 - `create-microservice.sh`: Orchestrates the end-to-end microservice generation workflow, helper functions
-  (`fixAndValidateFiles`, `normalizeComposer`, `commit`), Composer package installations, `jq` / `php -r` / `sed` /
-  `envsubst` transformations, and step commits.
+  (`logStep`, `logSubStep`, `runInContainer`, `requireWithContrib`, `updateComposerJsonWithJq`,
+  `updateComposerJsonWithPhp`, `prependToFile`, `renderTemplate`, `replacePlaceholder`, `fixAndValidateFiles`,
+  `normalizeComposer`, `commit`), Composer package installations, and step commits.
 - `Makefile`: Host development `Makefile` providing `build`, `shell`, `test`, `static`, `unit`, `integration`, and
   `help` targets that automatically pass `HOST_*` user/group variables to `docker compose run --rm boilerplate`.
 - `steps/`: Modular provisioning steps applied in numerical order:

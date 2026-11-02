@@ -126,8 +126,11 @@ during `step0050` configuration because backend microservices use `Unit` and `Fu
 On every push and pull request (ignoring documentation-only changes), the GitHub Actions `Tests` workflow runs on
 `ubuntu-latest` and executes:
 
-1. `actions/checkout@v7` to check out the repository.
-2. `make syntax` (`bash -n create-microservice.sh`) to validate generator script syntax.
-3. Git author configuration (`user.name` and `user.email`) required for `[init]` commits during generation.
-4. `make build` to build the `boilerplate` Docker image and execute all provisioning and validation steps into `./app`.
-5. `make test` to run static analysis, unit, and integration test targets against the generated microservice.
+1. `docker/setup-buildx-action@v4` to set up Docker Buildx.
+2. `actions/checkout@v7` to check out the repository.
+3. `make syntax` (`bash -n create-microservice.sh`) to validate generator script syntax.
+4. `docker/build-push-action@v7` with `cache-from: type=gha` and `cache-to: type=gha,mode=max` to restore and persist
+   the Docker build cache between workflow runs.
+5. Git author configuration (`user.name` and `user.email`) required for `[init]` commits during generation.
+6. `make build` to build the `boilerplate` Docker image and execute all provisioning and validation steps into `./app`.
+7. `make test` to run static analysis, unit, and integration test targets against the generated microservice.

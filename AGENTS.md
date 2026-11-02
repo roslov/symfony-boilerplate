@@ -44,9 +44,11 @@ Before changing code or templates, read:
 The repository operates across two contexts:
 
 1. **Host Machine / WSL (Repository Root)**:
-   - Used to run `bash -n create-microservice.sh`, `./create-microservice.sh`, and `docker compose` commands.
+   - Used to run `bash -n create-microservice.sh`, `./create-microservice.sh` (or `make build`), `make` targets
+     (`make test`, `make static`, `make unit`, `make integration`, `make shell`), and `docker compose` commands.
    - `compose.yaml` requires `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID` environment variables when building
-     or running the `boilerplate` container so generated files in `./app` match the host user's ownership.
+     or running the `boilerplate` container so generated files in `./app` match the host user's ownership (automatically
+     set by `Makefile` and `create-microservice.sh`).
 2. **Docker Container (`boilerplate` service, working directory `/app` mounted from `./app`)**:
    - All PHP, Composer, Rector, PHPCS, PHPStan, Symfony Console, and Codeception commands execute inside the
      `boilerplate` container (`docker compose run --rm boilerplate <cmd>`).
@@ -60,6 +62,8 @@ Repository files are organized into distinct layers:
 - `create-microservice.sh`: Orchestrates the end-to-end microservice generation workflow, helper functions
   (`fixAndValidateFiles`, `normalizeComposer`, `commit`), Composer package installations, `jq` / `php -r` / `sed` /
   `envsubst` transformations, and step commits.
+- `Makefile`: Host development `Makefile` providing `build`, `shell`, `test`, `static`, `unit`, `integration`, and
+  `help` targets that automatically pass `HOST_*` user/group variables to `docker compose run --rm boilerplate`.
 - `steps/`: Modular provisioning steps applied in numerical order:
   - `steps/step0010/`: `.gitignore` IDE exclusions prepended to Symfony's default `.gitignore`.
   - `steps/step0020/`: `.editorconfig` and `.gitattributes` templates.
@@ -128,6 +132,8 @@ Before declaring a task complete, run the appropriate verification commands:
 bash -n create-microservice.sh
 
 # If ./app is already generated and you are verifying template/code changes inside ./app:
+make test
+# Or run individual suites (make static / make unit / make integration) or via docker compose directly:
 HOST_USER="$(id -un)" HOST_GROUP="$(id -gn)" HOST_UID="$(id -u)" HOST_GID="$(id -g)" \
     docker compose run --rm boilerplate composer test:static
 HOST_USER="$(id -un)" HOST_GROUP="$(id -gn)" HOST_UID="$(id -u)" HOST_GID="$(id -g)" \
@@ -136,8 +142,9 @@ HOST_USER="$(id -un)" HOST_GROUP="$(id -gn)" HOST_UID="$(id -u)" HOST_GID="$(id 
     docker compose run --rm boilerplate composer test:integration
 ```
 
-When modifying `create-microservice.sh` or step provisioning logic, run `./create-microservice.sh` (requires `.env` and
-network access to Packagist) or report the exact blocker if offline. Do not represent an unexecuted check as passing.
+When modifying `create-microservice.sh` or step provisioning logic, run `make build` / `./create-microservice.sh`
+(requires `.env` and network access to Packagist) or report the exact blocker if offline. Do not represent an unexecuted
+check as passing.
 
 ## Code documentation rules
 
@@ -150,7 +157,7 @@ network access to Packagist) or report the exact blocker if offline. Do not repr
 
 Update `README.md` and `docs/` when changing:
 
-- environment variables in `.env.dist` or `compose.yaml`;
+- environment variables in `.env.dist`, `compose.yaml`, or root `Makefile` targets;
 - provisioning steps in `create-microservice.sh` or files under `steps/`;
 - Composer packages, scripts, or quality tools installed into generated microservices;
 - Docker base image tags (`IMAGE_TAG`, `COMPOSER_VERSION`), PHP extensions, or helper scripts under `docker/`;
@@ -162,7 +169,7 @@ All Markdown documentation files (`*.md`) must strictly adhere to the 120-charac
 
 Whenever changing functionality or workflows, update the corresponding workspace skill under `.agents/skills/`:
 
-- Docker execution, `HOST_*` variables, verification commands, or container setup ->
+- Docker execution, `HOST_*` variables, root `Makefile` targets, verification commands, or container setup ->
   `.agents/skills/docker-verification/SKILL.md`
 - Adding or modifying provisioning steps in `steps/` or `create-microservice.sh` ->
   `.agents/skills/boilerplate-steps-and-pipeline/SKILL.md`

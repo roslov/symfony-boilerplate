@@ -20,7 +20,14 @@ Before running or committing changes to `create-microservice.sh`:
 bash -n create-microservice.sh
 ```
 
-To run an end-to-end test of the generator (requires `.env` and network access to install Composer packages):
+To run an end-to-end test of the generator (requires `.env` and network access to install Composer packages), use
+`make build` (which creates `.env` from `.env.dist` if missing and runs `./create-microservice.sh`):
+
+```bash
+make build
+```
+
+Or directly via the script:
 
 ```bash
 cp -n .env.dist .env
@@ -39,10 +46,26 @@ which runs:
 
 ## 2. Verifying the generated microservice (`./app`)
 
-When `./app` has already been generated, you can run any Composer or Codeception check directly inside the `boilerplate`
-Docker container without re-running the entire provisioning script.
+When `./app` has already been generated, you can run any Composer or Codeception check inside the `boilerplate` Docker
+container without re-running the entire provisioning script.
 
-Always pass the `HOST_*` environment variables required by `compose.yaml`:
+Use the root `Makefile` targets (which automatically inject `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID`):
+
+```bash
+# Run all tests (static, unit, and integration)
+make test
+
+# Run full static analysis suite
+make static
+
+# Run Codeception Unit and Functional suites
+make unit
+
+# Run integration test script placeholder
+make integration
+```
+
+Or pass the `HOST_*` environment variables required by `compose.yaml` directly to `docker compose`:
 
 ```bash
 # Run full static analysis suite

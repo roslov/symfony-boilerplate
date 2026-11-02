@@ -16,9 +16,12 @@ strictly within the `boilerplate` Docker container.
 Commands in this repository are segregated into two distinct execution contexts:
 
 1. **Host Machine / WSL (Repository Root)**:
-   - Used to run `bash -n create-microservice.sh`, `./create-microservice.sh`, and `docker compose` commands.
+   - Used to run `bash -n create-microservice.sh`, `./create-microservice.sh` (or `make build`), `make` targets
+     (`make test`, `make static`, `make unit`, `make integration`, `make shell`, `make help`), and `docker compose`
+     commands.
    - `compose.yaml` requires `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID` environment variables when building
-     or running `docker compose` directly on the host.
+     or running `docker compose` directly on the host (automatically provided by `Makefile` and
+     `create-microservice.sh`).
    - **Never** install PHP, Composer, or PHP packages directly on the host machine or in WSL.
 
 2. **Docker Container (`boilerplate` service / working directory `/app` mounted from `./app`)**:
@@ -53,13 +56,34 @@ bash -n create-microservice.sh
 Requires `.env` (copied from `.env.dist`) and network access to Packagist:
 
 ```bash
+# Creates .env from .env.dist if missing and runs ./create-microservice.sh
+make build
+```
+
+Or run the script directly:
+
+```bash
 cp -n .env.dist .env
 ./create-microservice.sh
 ```
 
 ### 3. Run Verification Against an Existing `./app` Directory (Host -> Docker)
 
-When `./app` is already generated, run checks inside the `boilerplate` container by exporting the host user variables:
+When `./app` is already generated, run checks inside the `boilerplate` container using the root `Makefile` (which
+automatically passes `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID`):
+
+```bash
+# Run all tests (static, unit, and integration)
+make test
+
+# Or run individual suites / open container shell:
+make static
+make unit
+make integration
+make shell
+```
+
+Or run `docker compose` directly by exporting the host user variables:
 
 ```bash
 export HOST_USER="$(id -un)"
@@ -136,5 +160,6 @@ Before marking any task as complete:
 
 ## Skill Maintenance & Self-Enforcement
 
-Whenever changing Docker image settings, `compose.yaml`, `create-microservice.sh` verification functions, or Composer
-test scripts, update this skill file (`.agents/skills/docker-verification/SKILL.md`) to reflect the current workflow.
+Whenever changing Docker image settings, `compose.yaml`, the root `Makefile`, `create-microservice.sh` verification
+functions, or Composer test scripts, update this skill file (`.agents/skills/docker-verification/SKILL.md`) to reflect
+the current workflow.

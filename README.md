@@ -30,8 +30,8 @@ The boilerplate generator provides:
 
 - Bash bootstrapping pipeline (`create-microservice.sh`) and host `Makefile`
 - Docker and Docker Compose (`docker/Dockerfile`, `compose.yaml`)
-- PHP 8.5 (`IMAGE_TAG=8.5.5`) with strict types (`declare(strict_types=1);`)
-- Composer 2.9 (`COMPOSER_VERSION=2.9.7`) with `ergebnis/composer-normalize`
+- PHP 8.5 (`IMAGE_TAG=8.5.12`) with strict types (`declare(strict_types=1);`)
+- Composer 2.11 (`COMPOSER_VERSION=2.11.1`) with `ergebnis/composer-normalize`
 - Symfony skeleton (`SYMFONY_VERSION` configured in `.env`, e.g., `8.1`)
 - Roslov Queue Bundle (`roslov/queue-bundle`) and RabbitMQ (`php-amqplib/rabbitmq-bundle`)
 - Codeception 5.3 (`codeception/codeception`, `codeception/module-asserts`, `codeception/module-symfony`)

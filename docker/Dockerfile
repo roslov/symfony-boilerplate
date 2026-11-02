@@ -3,10 +3,10 @@
 ################################
 
 # Build argument: Image tag
-ARG IMAGE_TAG=8.5.5
+ARG IMAGE_TAG=8.5.12
 
 # Build argument: Composer version
-ARG COMPOSER_VERSION=2.9.7
+ARG COMPOSER_VERSION=2.11.1
 
 ###############################
 ### Stage: Composer version ###

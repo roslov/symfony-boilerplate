@@ -19,6 +19,9 @@ to Git on the host.
 
 ```text
 symfony-boilerplate/
+├── .github/
+│   └── workflows/
+│       └── tests.yml        # GitHub Actions CI workflow (syntax check, make build, make test)
 ├── .env.dist                # Default template variables for microservice generation
 ├── .gitignore               # Ignores /.idea/, /app/, and .env
 ├── Makefile                 # Host helper targets (build, shell, test, static, unit, integration, help)

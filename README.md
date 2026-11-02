@@ -38,7 +38,7 @@ The boilerplate generator provides:
 - PHPStan (`level: max`) with `phpstan/phpstan-symfony`
 - PHP_CodeSniffer with `roslov/psr12ext` (`PSR12Ext` ruleset)
 - Rector 2 (`rector/rector`) for automated PHP and Symfony refactoring rules
-- Jenkins declarative pipeline (`Jenkinsfile`)
+- GitHub Actions (`.github/workflows/tests.yml`) and Jenkins declarative pipeline (`Jenkinsfile`)
 
 ## Architecture
 
@@ -48,6 +48,8 @@ The repository is organized as follows:
   applies every step in sequence while validating and committing the result;
 - `Makefile`: Host development `Makefile` providing helper targets (`build`, `shell`, `test`, `static`, `unit`,
   `integration`, `help`) that automatically pass `HOST_*` user/group variables to `docker compose`;
+- `.github/workflows/tests.yml`: GitHub Actions CI workflow verifying `create-microservice.sh` syntax, microservice
+  generation (`make build`), and static/unit/integration tests (`make test`);
 - `compose.yaml`: Docker Compose definition for the `boilerplate` service mounting `./app` to `/app`;
 - `docker/`: Container build context (`Dockerfile` and `image-files/` with PHP INI configurations and helper scripts);
 - `steps/`: Ordered step directories (`step0010` to `step1010`) containing templates, configurations, and stubs copied

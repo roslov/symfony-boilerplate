@@ -28,6 +28,8 @@
 - [x] `normalizeComposer` runs `composer bump` and `composer normalize` whenever `composer.json` is modified.
 - [x] `fixAndValidateFiles` runs Rector twice, `composer phpcbf .`, `composer test:static`, and `composer test:unit`
   before committing code steps.
+- [x] GitHub Actions workflow `.github/workflows/tests.yml` validates `create-microservice.sh` syntax, executes
+  `make build`, and runs `make test` in CI.
 
 ## Generated Microservice Quality and Tooling
 

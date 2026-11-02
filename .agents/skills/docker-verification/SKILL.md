@@ -51,9 +51,10 @@ Commands in this repository are segregated into two distinct execution contexts:
 bash -n create-microservice.sh
 ```
 
-### 2. Run Full Microservice Generation Pipeline (Host + Docker)
+### 2. Run Full Microservice Generation Pipeline (Host + Docker / GitHub Actions CI)
 
-Requires `.env` (copied from `.env.dist`) and network access to Packagist:
+Requires `.env` (copied from `.env.dist`) and network access to Packagist (also executed automatically in CI by
+`.github/workflows/tests.yml` along with `bash -n create-microservice.sh` and `make test`):
 
 ```bash
 # Creates .env from .env.dist if missing and runs ./create-microservice.sh

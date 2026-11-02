@@ -23,6 +23,7 @@ The boilerplate generator provides:
   `stderr` at `info` action level in `prod`);
 - asynchronous messaging setup via `roslov/queue-bundle` and `php-amqplib/rabbitmq-bundle` with an example consumer
   (`App\Consumer\ExampleConsumer`);
+- AI agent and contributor guidance (`AGENTS.md`, `docs/`, and `.agents/skills/`) rendered via `envsubst`;
 - development `Makefile` and `Jenkinsfile` CI pipeline templates rendered via `envsubst`.
 
 ## Technology

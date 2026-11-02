@@ -507,6 +507,32 @@ fixAndValidateFiles
 commit 'Configured Rector'
 
 ########################################################################################################################
+# Step 0090: AI Agent Support (AGENTS.md, Documentation, and Skills)
+########################################################################################################################
+
+logStep 'Adding AI agent support...'
+sed -i '/^Consumers$/,/^---------$/c\${REPLACE}\n\n\nConsumers\n---------' README.md
+replacePlaceholder README.md ../steps/step0090/documentation.md
+
+cp -rf ../steps/step0090/project/. ./
+AGENT_TEMPLATE_VARS='${PROJECT_NAME} ${PROJECT_FULL_NAME} ${PROJECT_DESCRIPTION} ${PARENT_PROJECT_FULL_NAME} ${SYMFONY_VERSION}'
+for templateFile in \
+    AGENTS.md \
+    docs/requirements.md \
+    docs/architecture.md \
+    docs/security.md \
+    docs/testing.md \
+    docs/acceptance-criteria.md \
+    .agents/skills/docker-verification/SKILL.md \
+    .agents/skills/testing/SKILL.md \
+    .agents/skills/queue-and-messaging/SKILL.md; do
+    renderTemplate "${templateFile}" "${templateFile}" "${AGENT_TEMPLATE_VARS}"
+done
+
+fixAndValidateFiles
+commit 'Added AI agent support'
+
+########################################################################################################################
 # Step 1010: CI Pipeline (Jenkinsfile)
 ########################################################################################################################
 

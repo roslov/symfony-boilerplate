@@ -42,6 +42,9 @@
   `prod`.
 - [x] `roslov/queue-bundle` and `old_sound_rabbit_mq` are configured with `App\Consumer\ExampleConsumer` bound to queue
   `${PROJECT_NAME}-some-example` on the `common` topic exchange.
+- [x] Generated microservices include `AGENTS.md`, `docs/` (`requirements.md`, `architecture.md`, `security.md`,
+  `testing.md`, `acceptance-criteria.md`), and `.agents/skills/` (`docker-verification`, `testing`,
+  `queue-and-messaging`) rendered in `step0090`.
 - [x] All PHP files in `steps/` enforce `declare(strict_types=1);` and have complete PHPDoc doc blocks.
 - [x] All Markdown documentation files (`*.md`) strictly adhere to the 120-character line length limit.
 - [x] Workspace skills under `.agents/skills/` accurately document current repository workflows and templates.

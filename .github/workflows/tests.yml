@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Validate generator script syntax
-        run: bash -n create-microservice.sh
+        run: make syntax
 
       - name: Configure Git
         run: |

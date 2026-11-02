@@ -24,7 +24,7 @@ symfony-boilerplate/
 │       └── tests.yml        # GitHub Actions CI workflow (syntax check, make build, make test)
 ├── .env.dist                # Default template variables for microservice generation
 ├── .gitignore               # Ignores /.idea/, /app/, and .env
-├── Makefile                 # Host helper targets (build, shell, test, static, unit, integration, help)
+├── Makefile                 # Host helper targets (build, shell, test, syntax, static, unit, integration, help)
 ├── compose.yaml             # Defines the `boilerplate` Docker Compose service
 ├── create-microservice.sh   # Main Bash pipeline script
 ├── docker/

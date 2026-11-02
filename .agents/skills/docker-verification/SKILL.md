@@ -16,9 +16,9 @@ strictly within the `boilerplate` Docker container.
 Commands in this repository are segregated into two distinct execution contexts:
 
 1. **Host Machine / WSL (Repository Root)**:
-   - Used to run `bash -n create-microservice.sh`, `./create-microservice.sh` (or `make build`), `make` targets
-     (`make test`, `make static`, `make unit`, `make integration`, `make shell`, `make help`), and `docker compose`
-     commands.
+   - Used to run `bash -n create-microservice.sh` (or `make syntax`), `./create-microservice.sh` (or `make build`),
+     `make` targets (`make test`, `make syntax`, `make static`, `make unit`, `make integration`, `make shell`,
+     `make help`), and `docker compose` commands.
    - `compose.yaml` requires `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID` environment variables when building
      or running `docker compose` directly on the host (automatically provided by `Makefile` and
      `create-microservice.sh`).
@@ -48,13 +48,15 @@ Commands in this repository are segregated into two distinct execution contexts:
 ### 1. Validate Generator Script Syntax (Host)
 
 ```bash
+make syntax
+# Or directly:
 bash -n create-microservice.sh
 ```
 
 ### 2. Run Full Microservice Generation Pipeline (Host + Docker / GitHub Actions CI)
 
 Requires `.env` (copied from `.env.dist`) and network access to Packagist (also executed automatically in CI by
-`.github/workflows/tests.yml` along with `bash -n create-microservice.sh` and `make test`):
+`.github/workflows/tests.yml` along with `make syntax` and `make test`):
 
 ```bash
 # Creates .env from .env.dist if missing and runs ./create-microservice.sh
@@ -74,10 +76,11 @@ When `./app` is already generated, run checks inside the `boilerplate` container
 automatically passes `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID`):
 
 ```bash
-# Run all tests (static, unit, and integration)
+# Run all tests (syntax, static, unit, and integration)
 make test
 
 # Or run individual suites / open container shell:
+make syntax
 make static
 make unit
 make integration

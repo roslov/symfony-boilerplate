@@ -44,8 +44,9 @@ Before changing code or templates, read:
 The repository operates across two contexts:
 
 1. **Host Machine / WSL (Repository Root)**:
-   - Used to run `bash -n create-microservice.sh`, `./create-microservice.sh` (or `make build`), `make` targets
-     (`make test`, `make static`, `make unit`, `make integration`, `make shell`), and `docker compose` commands.
+   - Used to run `bash -n create-microservice.sh` (or `make syntax`), `./create-microservice.sh` (or `make build`),
+     `make` targets (`make test`, `make syntax`, `make static`, `make unit`, `make integration`, `make shell`), and
+     `docker compose` commands.
    - `compose.yaml` requires `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID` environment variables when building
      or running the `boilerplate` container so generated files in `./app` match the host user's ownership (automatically
      set by `Makefile` and `create-microservice.sh`).
@@ -63,10 +64,11 @@ Repository files are organized into distinct layers:
   (`logStep`, `logSubStep`, `runInContainer`, `requireWithContrib`, `updateComposerJsonWithJq`,
   `updateComposerJsonWithPhp`, `prependToFile`, `renderTemplate`, `replacePlaceholder`, `fixAndValidateFiles`,
   `normalizeComposer`, `commit`), Composer package installations, and step commits.
-- `Makefile`: Host development `Makefile` providing `build`, `shell`, `test`, `static`, `unit`, `integration`, and
-  `help` targets that automatically pass `HOST_*` user/group variables to `docker compose run --rm boilerplate`.
-- `.github/workflows/tests.yml`: GitHub Actions CI workflow that validates `create-microservice.sh` syntax, builds a
-  microservice via `make build`, and runs `make test` on pushes and pull requests.
+- `Makefile`: Host development `Makefile` providing `build`, `shell`, `test`, `syntax`, `static`, `unit`,
+  `integration`, and `help` targets that automatically pass `HOST_*` user/group variables to
+  `docker compose run --rm boilerplate`.
+- `.github/workflows/tests.yml`: GitHub Actions CI workflow that validates `create-microservice.sh` syntax
+  (`make syntax`), builds a microservice via `make build`, and runs `make test` on pushes and pull requests.
 - `steps/`: Modular provisioning steps applied in numerical order:
   - `steps/step0010/`: `.gitignore` IDE exclusions prepended to Symfony's default `.gitignore`.
   - `steps/step0020/`: `.editorconfig` and `.gitattributes` templates.
@@ -134,11 +136,11 @@ Before declaring a task complete, run the appropriate verification commands:
 
 ```bash
 # Validate shell script syntax
-bash -n create-microservice.sh
+make syntax
 
 # If ./app is already generated and you are verifying template/code changes inside ./app:
 make test
-# Or run individual suites (make static / make unit / make integration) or via docker compose directly:
+# Or run individual suites (make syntax / make static / make unit / make integration) or via docker compose directly:
 HOST_USER="$(id -un)" HOST_GROUP="$(id -gn)" HOST_UID="$(id -u)" HOST_GID="$(id -g)" \
     docker compose run --rm boilerplate composer test:static
 HOST_USER="$(id -un)" HOST_GROUP="$(id -gn)" HOST_UID="$(id -u)" HOST_GID="$(id -g)" \

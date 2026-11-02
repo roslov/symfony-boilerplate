@@ -46,10 +46,10 @@ The repository is organized as follows:
 
 - `create-microservice.sh`: Main Bash orchestration script that builds the Docker image, initializes `./app`, and
   applies every step in sequence while validating and committing the result;
-- `Makefile`: Host development `Makefile` providing helper targets (`build`, `shell`, `test`, `static`, `unit`,
-  `integration`, `help`) that automatically pass `HOST_*` user/group variables to `docker compose`;
-- `.github/workflows/tests.yml`: GitHub Actions CI workflow verifying `create-microservice.sh` syntax, microservice
-  generation (`make build`), and static/unit/integration tests (`make test`);
+- `Makefile`: Host development `Makefile` providing helper targets (`build`, `shell`, `test`, `syntax`, `static`,
+  `unit`, `integration`, `help`) that automatically pass `HOST_*` user/group variables to `docker compose`;
+- `.github/workflows/tests.yml`: GitHub Actions CI workflow verifying `create-microservice.sh` syntax (`make syntax`),
+  microservice generation (`make build`), and static/unit/integration tests (`make test`);
 - `compose.yaml`: Docker Compose definition for the `boilerplate` service mounting `./app` to `/app`;
 - `docker/`: Container build context (`Dockerfile` and `image-files/` with PHP INI configurations and helper scripts);
 - `steps/`: Ordered step directories (`step0010` to `step1010`) containing templates, configurations, and stubs copied
@@ -113,15 +113,16 @@ the repository root:
 
 ```sh
 # 1. Check Bash script syntax
-bash -n create-microservice.sh
+make syntax
 
 # 2. Run the full microservice generation pipeline (creates .env if missing and runs ./create-microservice.sh)
 make build
 
-# 3. Run all static analysis, unit, and integration tests against an already generated ./app directory
+# 3. Run all syntax, static analysis, unit, and integration tests against an already generated ./app directory
 make test
 
 # Or run individual test suites via make:
+make syntax
 make static
 make unit
 make integration

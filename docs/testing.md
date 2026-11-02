@@ -16,8 +16,8 @@ Verification in the **Symfony Microservice Boilerplate** operates at two levels:
 Before running or committing changes to `create-microservice.sh`:
 
 ```bash
-# Check Bash syntax without executing the script
-bash -n create-microservice.sh
+# Check Bash syntax without executing the script (or via: bash -n create-microservice.sh)
+make syntax
 ```
 
 To run an end-to-end test of the generator (requires `.env` and network access to install Composer packages), use
@@ -52,8 +52,11 @@ container without re-running the entire provisioning script.
 Use the root `Makefile` targets (which automatically inject `HOST_USER`, `HOST_GROUP`, `HOST_UID`, and `HOST_GID`):
 
 ```bash
-# Run all tests (static, unit, and integration)
+# Run all tests (syntax, static, unit, and integration)
 make test
+
+# Check generator script syntax
+make syntax
 
 # Run full static analysis suite
 make static
@@ -124,7 +127,7 @@ On every push and pull request (ignoring documentation-only changes), the GitHub
 `ubuntu-latest` and executes:
 
 1. `actions/checkout@v7` to check out the repository.
-2. `bash -n create-microservice.sh` to validate generator script syntax.
+2. `make syntax` (`bash -n create-microservice.sh`) to validate generator script syntax.
 3. Git author configuration (`user.name` and `user.email`) required for `[init]` commits during generation.
 4. `make build` to build the `boilerplate` Docker image and execute all provisioning and validation steps into `./app`.
 5. `make test` to run static analysis, unit, and integration test targets against the generated microservice.

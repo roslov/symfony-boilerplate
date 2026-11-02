@@ -40,7 +40,10 @@ shell: ## Gets into container’s shell
 # Testing
 #
 
-test: static unit integration ## Runs all tests
+test: syntax static unit integration ## Runs all tests
+
+syntax: ## Checks script syntax
+	bash -n create-microservice.sh
 
 static: ## Runs static analysis
 	$(DOCKER_COMPOSE_RUN) composer test:static
